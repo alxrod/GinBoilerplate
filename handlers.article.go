@@ -17,6 +17,14 @@ func showIndexPage(c *gin.Context) {
 
 }
 
+func showArticleCreationPage(c *gin.Context) {
+	articles := getAllArticles()
+
+	render(c, gin.H{
+		"title":   "Create Page",
+		"payload": articles}, "create-article.html")
+}
+
 func getArticle(c *gin.Context) {
 	if articleID, err := strconv.Atoi(c.Param("article_id")); err == nil {
 		if article, err := getArticleByID(articleID); err == nil {
@@ -33,5 +41,18 @@ func getArticle(c *gin.Context) {
 		}
 	} else {
 		c.AbortWithStatus(http.StatusNotFound)
+	}
+}
+
+func createArticle(c *gin.Context) {
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+
+	if a, err := createNewArticle(title, content); err == nil {
+		render(c, gin.H{
+			"title":   "Submission Successful",
+			"payload": a}, "submission-successful.html")
+	} else {
+		c.AbortWithStatus(http.StatusBadRequest)
 	}
 }

@@ -9,6 +9,10 @@ import (
 var router *gin.Engine
 
 func main() {
+
+	// Set prod mode
+	// gin.SetMode(gin.ReleaseMode)
+
 	router = gin.Default()
 	router.LoadHTMLGlob("templates/*")
 
